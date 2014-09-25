@@ -22,6 +22,7 @@ $error = false;
 $output = '';
 $type = $format = 'unknown';
 $words = array('unknown');
+$content_type = 'text/html';
 
 $data = isset($_REQUEST['data']) ? rtrim(ltrim($_REQUEST['data'],'/'),'/') : false;
 
@@ -47,6 +48,7 @@ if ($data) {
 												
 						switch($format) {
 							case 'plain':
+								$content_type = 'text/plain';
 								for ($i = 1; $i <= $count; $i++) {
 									$output .= getWords($type,$words,true,($i == 1 ? true : false));
 									if ($i != $count) $output .= "\n\n";
@@ -113,6 +115,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+	header('Content-type: '.$content_type);
 	echo $output;
 }
 
