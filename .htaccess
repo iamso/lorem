@@ -443,9 +443,17 @@ FileETag None
 # | URL Rewrite for Parameters                                                 |
 # ------------------------------------------------------------------------------
 
+<IfModule mod_headers.c>
+  Header always set Access-Control-Allow-Origin "*"
+  Header always set Access-Control-Allow-Methods "POST, GET"
+  Header always set Access-Control-Max-Age "1000"
+  Header always set Access-Control-Allow-Headers "x-requested-with, Content-Type, origin, authorization, accept, client-security-token"
+  Header always set Access-Control-Allow-Credentials "true"
+</IfModule>
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-	
+
 	# Checks to see if the user is attempting to access a valid file,
 	# such as an image or css document, if this isn't true it sends the
 	# request to index.php
