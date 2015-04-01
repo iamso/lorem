@@ -113,6 +113,9 @@ if (!ini_get('zlib.output_compression')) {
 }
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST");
+header("Access-Control-Max-Age: 1000");
+header("Access-Control-Allow-Headers: x-requested-with, Content-Type, origin, authorization, accept, client-security-token");
+header("Access-Control-Allow-Credentials: true");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	header('Content-type: '.$content_type);
