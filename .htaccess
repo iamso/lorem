@@ -454,6 +454,10 @@ FileETag None
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
+  # Redirect to https://
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 	# Checks to see if the user is attempting to access a valid file,
 	# such as an image or css document, if this isn't true it sends the
 	# request to index.php
