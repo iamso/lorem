@@ -42,10 +42,10 @@ if ($data) {
 							$words = array('unknown');
 						}
 					}
-					
+
 					if (!$error) {
 						$count = $count && is_numeric($count) ? $count : 1;
-												
+
 						switch($format) {
 							case 'plain':
 								$content_type = 'text/plain';
@@ -57,7 +57,7 @@ if ($data) {
 							case 'p':
 								for ($i = 1; $i <= $count; $i++) {
 									$output .= '<p>'.getWords($type,$words,true,($i == 1 ? true : false)).'</p>';
-								}								
+								}
 								break;
 							case 'ul':
 							case 'ol':
@@ -78,9 +78,9 @@ if ($data) {
 								break;
 							case 'article':
 								break;
-						}						
+						}
 					}
-					
+
 				}
 				else {
 					$error = true;
@@ -119,12 +119,15 @@ header("Access-Control-Allow-Credentials: true");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	header('Content-type: '.$content_type);
+	header('Content-length: '.mb_strlen($output));
 	echo $output;
 }
 
 else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	$json = json_encode(array('status' => $error ? 'error' : 'ok', 'type' => $type, 'format' => $format, 'count' => $count, 'words' => $words[0].(array_key_exists(1, $words) ? '-'.$words[1] : ''), 'time' => time(), 'output' => $output));
 	header('Content-type: application/json');
-	echo json_encode(array('status' => $error ? 'error' : 'ok', 'type' => $type, 'format' => $format, 'count' => $count, 'words' => $words[0].(array_key_exists(1, $words) ? '-'.$words[1] : ''), 'time' => time(), 'output' => $output));
+	header('Content-length: '.mb_strlen($json));
+	echo $json;
 }
 
 function getWordCount($words) {
@@ -138,7 +141,7 @@ function getWords($type,$words,$punctuation = true,$lorem = false) {
 			//$output = $generator->getContent(getWordCount($words), 'plain', false);
 			$output = rtrim(str_replace('.', ',', $generator->getContent(getWordCount($words), 'plain', $lorem)), ', ').'.';
 			break;
-		
+
 		case 'gibberish':
 			//break;
 		case 'nonsense':
